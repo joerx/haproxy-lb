@@ -1,14 +1,17 @@
 version: "3.7"
 
 services:
-  nginx:
-    image: nginx:1.17.2-alpine
+  lb:
+    image: haproxy:2.1
     ports: 
       - "8080:8080"
+      - "8084:8084"
     networks:
       - backend
     volumes:
-      - "./nginx-default.conf:/etc/nginx/conf.d/default.conf"
+      - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
+    depends_on:
+      - app
       
   app:
     build: .
